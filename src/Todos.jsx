@@ -1,6 +1,6 @@
 import { createMutation, createQuery, useQueryClient } from "@tanstack/solid-query";
 import cuid from "cuid";
-import { For, Match, Switch } from "solid-js";
+import { For } from "solid-js";
 
 function Todos() {
   const queryClient = useQueryClient();
@@ -59,46 +59,38 @@ function Todos() {
   );
 
   return (
-    <div style={{ width: "100%", "margin-inline": "auto", "max-width": "60ch", "padding-inline-start": "16px", "padding-inline-end": "16px" }}>
-      <Switch>
-        <Match when={getTodosQuery.isLoading}>Loading...</Match>
-        <Match when={getTodosQuery.isError}>Error</Match>
-        <Match when={getTodosQuery.isSuccess}>
-          <div style={{ display: "flex", "flex-direction": "column", "min-height": "100vh", "padding-top": "12px", "padding-bottom": "12px" }}>
-            <div style={{ display: "flex", "flex-direction": "column", "flex-grow": 1, "overflow-y": "scroll" }}>
-              <For each={getTodosQuery.data}>
-                {(todo) => (
-                  <div style={{ display: "flex", gap: "8px" }}>
-                    <input type="checkbox" id={todo.id} name={todo.id} onClick={() => deleteMutationQuery.mutate(todo.id)} />
-                    <label for={todo.id}>{todo.label}</label>
-                  </div>
-                )}
-              </For>
+    <>
+      <div style={{ display: "flex", "flex-direction": "column", "flex-grow": 1, "overflow-y": "scroll" }}>
+        <For each={getTodosQuery.data}>
+          {(todo) => (
+            <div style={{ display: "flex", gap: "8px" }}>
+              <input type="checkbox" id={todo.id} name={todo.id} onClick={() => deleteMutationQuery.mutate(todo.id)} />
+              <label for={todo.id}>{todo.label}</label>
             </div>
-            <div style={{ display: "flex", "flex-basis": "68px", "flex-shrink": 0 }}>
-              <form
-                ref={form}
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  createTodoMutation.mutate({ label: e.target.label.value });
-                }}
-                style={{ width: "100%" }}
-              >
-                <input
-                  autofocus
-                  required
-                  type="text"
-                  id="label"
-                  name="label"
-                  placeholder="What do you need to do?"
-                  style={{ all: "unset", height: "100%", width: "100%", cursor: "revert" }}
-                />
-              </form>
-            </div>
-          </div>
-        </Match>
-      </Switch>
-    </div>
+          )}
+        </For>
+      </div>
+      <div style={{ display: "flex", "flex-basis": "68px", "flex-shrink": 0 }}>
+        <form
+          ref={form}
+          onSubmit={(e) => {
+            e.preventDefault();
+            createTodoMutation.mutate({ label: e.target.label.value });
+          }}
+          style={{ width: "100%" }}
+        >
+          <input
+            autofocus
+            required
+            type="text"
+            id="label"
+            name="label"
+            placeholder="What do you need to do?"
+            style={{ all: "unset", height: "100%", width: "100%", cursor: "revert" }}
+          />
+        </form>
+      </div>
+    </>
   );
 }
 
