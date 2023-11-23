@@ -26,7 +26,7 @@ function Todos() {
     todos: "++id,label",
   });
 
-  const getTodosQuery = createQuery(() => ({
+  const getTodosQuery = createQuery<Todo[]>(() => ({
     queryKey: ["todos.get"],
     queryFn: () => db.todos.toArray(),
   }));
